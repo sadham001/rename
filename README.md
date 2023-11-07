@@ -37,7 +37,7 @@ Open a terminal and navigate to the directory where you saved the 'rename.sh' sc
 ### Usage
 You can use the 'rename.sh' script to rename files and directories in the following format:
 
-```rename old_name new_name or rn old_name new_name```
+```rename old_name new_name``` or ```rn old_name new_name```
 
 Replace 'old_name' with the current file or directory name you want to rename and 'new_name' with the desired new name.
 
