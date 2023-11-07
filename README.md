@@ -21,7 +21,7 @@ sudo yum install git
 ```
 ### Download the Script
 Access the GitHub repository for the 'rename.sh' script at the following URL:
-GitHub Repository
+[GitHub Repository](https://github.com/sadham001/rename/)
 
 Click on the 'rename.sh' file in the repository to view its contents.
 
