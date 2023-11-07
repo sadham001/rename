@@ -1,27 +1,61 @@
 #!/bin/bash
 
-# Define the script name and aliases
-script_name="rename.sh"
-aliases=("rename" "rn")
-
 # Set the installation directory
 install_dir="/usr/local/bin"
 
-# Check if the script already exists
-if [ -e "$install_dir/$script_name" ]; then
-  echo "The script '$script_name' already exists in '$install_dir'."
+# Define the alias names
+aliases=("rename" "rn")
+
+# Initialize the overriding choice
+override_choice="n"
+
+# Check if any of the aliases already exist
+for alias in "${aliases[@]}"; do
+  if [ -f "$install_dir/$alias" ]; then
+    echo "The program '$alias' already exists."
+    read -p "Do you want to override and reinstall it? (y/n): " choice
+    if [ "$choice" = "y" ]; then
+      override_choice="y"
+      break
+    else
+      echo "Installation aborted."
+      exit 1
+    fi
+  fi
+done
+
+# Create the aliases and define their behavior
+for alias in "${aliases[@]}"; do
+  cat > "$install_dir/$alias" <<EOF
+#!/bin/bash
+
+if [ "\$#" -ne 2 ]; then
+  echo "Usage: $alias <old_name> <new_name>"
   exit 1
 fi
 
-# Copy the script to the installation directory
-cp "$script_name" "$install_dir/$script_name"
+old_name="\$1"
+new_name="\$2"
 
-# Create aliases for the script
-for alias in "${aliases[@]}"; do
-  echo "alias $alias='$install_dir/$script_name'" >> "$HOME/.bashrc"
+if [ -e "\$new_name" ]; then
+  echo "Error: The new name '\$new_name' already exists."
+  exit 1
+fi
+
+mv "\$old_name" "\$new_name"
+if [ \$? -eq 0 ]; then
+  echo "Renamed '\$old_name' to '\$new_name'"
+else
+  echo "Error: Renaming failed."
+fi
+EOF
+
+  # Make the alias executable
+  chmod +x "$install_dir/$alias"
 done
 
-# Source the .bashrc file to make the aliases available
-source "$HOME/.bashrc"
-
-echo "Installation complete. You can now use 'rename' or 'rn' to rename files and directories."
+if [ "$override_choice" = "y" ]; then
+  echo "Installation complete. You can now use 'rename' or 'rn' to rename files and directories."
+else
+  echo "Installation aborted."
+fi
