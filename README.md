@@ -1,4 +1,4 @@
-# Renaming Tool for Linux
+# File or Folder Easy Renaming Tool for Linux
 
 ## Overview
 
